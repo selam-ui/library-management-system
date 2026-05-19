@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="12" prefWidth="520" prefHeight="360" styleClass="root-pane"
+      xmlns:fx="http://javafx.com/fxml" fx:controller="controller.DashboardController">
+    <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+    <Label fx:id="welcomeLabel" styleClass="title"/>
+    <Label fx:id="roleLabel"/>
+    <HBox spacing="10">
+        <Button text="Manage Books" onAction="#onOpenBooks" styleClass="primary"/>
+        <Button text="Logout" onAction="#onLogout"/>
+    </HBox>
+</VBox>

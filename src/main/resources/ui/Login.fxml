@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox alignment="CENTER" spacing="12" prefWidth="380" prefHeight="320"
+      styleClass="root-pane" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controller.LoginController">
+    <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+    <Label text="Library Login" styleClass="title"/>
+    <TextField fx:id="usernameField" promptText="Username"/>
+    <PasswordField fx:id="passwordField" promptText="Password"/>
+    <Button text="Sign In" onAction="#onLogin" defaultButton="true" styleClass="primary"/>
+    <Label fx:id="messageLabel" styleClass="message"/>
+</VBox>

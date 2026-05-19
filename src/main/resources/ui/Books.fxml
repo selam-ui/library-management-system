@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="10" prefWidth="900" prefHeight="600" styleClass="root-pane"
+      xmlns:fx="http://javafx.com/fxml" fx:controller="controller.BookController">
+    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+    <Label text="Books" styleClass="title"/>
+
+    <HBox spacing="8">
+        <TextField fx:id="searchField" promptText="Search title / author / ISBN" HBox.hgrow="ALWAYS"/>
+        <Button text="Search" onAction="#onSearch"/>
+        <Button text="Back" onAction="#onBack"/>
+    </HBox>
+
+    <TableView fx:id="table" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idCol" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="isbnCol" text="ISBN" prefWidth="140"/>
+            <TableColumn fx:id="titleCol" text="Title" prefWidth="220"/>
+            <TableColumn fx:id="authorCol" text="Author" prefWidth="160"/>
+            <TableColumn fx:id="categoryCol" text="Category" prefWidth="120"/>
+            <TableColumn fx:id="totalCol" text="Total" prefWidth="70"/>
+            <TableColumn fx:id="availableCol" text="Available" prefWidth="90"/>
+        </columns>
+    </TableView>
+
+    <GridPane hgap="8" vgap="8">
+        <TextField fx:id="isbnField" promptText="ISBN" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <TextField fx:id="titleField" promptText="Title" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <TextField fx:id="authorField" promptText="Author" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+        <TextField fx:id="categoryField" promptText="Category" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <TextField fx:id="totalField" promptText="Total copies" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <TextField fx:id="availableField" promptText="Available copies" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+    </GridPane>
+
+    <HBox spacing="8">
+        <Button text="Add" onAction="#onAdd" styleClass="primary"/>
+        <Button text="Update" onAction="#onUpdate"/>
+        <Button text="Delete" onAction="#onDelete"/>
+    </HBox>
+
+    <Label fx:id="messageLabel" styleClass="message"/>
+</VBox>

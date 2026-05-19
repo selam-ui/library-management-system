@@ -1,0 +1,8 @@
+.root-pane { -fx-background-color: #f7f8fb; -fx-font-family: "Segoe UI", "Helvetica Neue", Arial; }
+.title { -fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1f2937; }
+.message { -fx-text-fill: #b91c1c; }
+.button { -fx-background-radius: 6; -fx-padding: 8 14; }
+.primary { -fx-background-color: #2563eb; -fx-text-fill: white; }
+.primary:hover { -fx-background-color: #1d4ed8; }
+.text-field, .password-field { -fx-background-radius: 6; -fx-padding: 8; }
+.table-view { -fx-background-radius: 6; }
