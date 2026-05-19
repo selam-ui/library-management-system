@@ -1,15 +1,18 @@
 package controller;
 
 import dto.BookDTO;
+import dto.ReservationDTO;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Region;
 import service.BookService;
+import service.ReservationService;
 import service.impl.BookServiceImpl;
+import service.impl.ReservationServiceImpl;
 import util.SceneManager;
 
 public class BookController {
@@ -24,8 +27,10 @@ public class BookController {
 
     @FXML private TextField isbnField, titleField, authorField, categoryField, totalField, availableField, searchField;
     @FXML private Label messageLabel;
+    @FXML private Label notificationLabel;
 
     private final BookService service = new BookServiceImpl();
+    private final ReservationService reservationService = new ReservationServiceImpl();
     private final ObservableList<BookDTO> data = FXCollections.observableArrayList();
 
     @FXML
@@ -53,6 +58,16 @@ public class BookController {
 
     private void refresh() {
         data.setAll(service.listAll());
+        refreshNotifications();
+    }
+
+    private void refreshNotifications() {
+        try {
+            int readyCount = reservationService.countReadyNotifications();
+            notificationLabel.setText(readyCount > 0 ? "You have " + readyCount + " reserved book(s) ready to borrow." : "");
+        } catch (Exception e) {
+            notificationLabel.setText("");
+        }
     }
 
     private BookDTO fromFields() {
@@ -72,7 +87,9 @@ public class BookController {
             service.add(fromFields());
             messageLabel.setText("Book added");
             refresh();
-        } catch (Exception e) { messageLabel.setText(e.getMessage()); }
+        } catch (Exception e) {
+            messageLabel.setText(e.getMessage());
+        }
     }
 
     @FXML
@@ -85,16 +102,22 @@ public class BookController {
             service.update(d);
             messageLabel.setText("Book updated");
             refresh();
-        } catch (Exception e) { messageLabel.setText(e.getMessage()); }
+        } catch (Exception e) {
+            messageLabel.setText(e.getMessage());
+        }
     }
 
     @FXML
     public void onDelete() {
         BookDTO sel = table.getSelectionModel().getSelectedItem();
         if (sel == null) { messageLabel.setText("Select a book"); return; }
-        service.delete(sel.getId());
-        messageLabel.setText("Book deleted");
-        refresh();
+        try {
+            service.delete(sel.getId());
+            messageLabel.setText("Book deleted");
+            refresh();
+        } catch (Exception e) {
+            messageLabel.setText(e.getMessage());
+        }
     }
 
     @FXML
@@ -103,5 +126,81 @@ public class BookController {
     }
 
     @FXML
-    public void onBack() { SceneManager.switchTo("/ui/Dashboard.fxml"); }
+    public void onAll() {
+        data.setAll(service.listAll());
+        refreshNotifications();
+    }
+
+    @FXML
+    public void onAvailable() {
+        data.setAll(service.listAvailable());
+        refreshNotifications();
+    }
+
+    @FXML
+    public void onBorrowed() {
+        data.setAll(service.listBorrowed());
+        refreshNotifications();
+    }
+
+    @FXML
+    public void onNewest() {
+        data.setAll(service.listNewest());
+        refreshNotifications();
+    }
+
+    @FXML
+    public void onReserve() {
+        BookDTO sel = table.getSelectionModel().getSelectedItem();
+        if (sel == null) {
+            messageLabel.setText("Select a book to reserve.");
+            return;
+        }
+        if (sel.getAvailableCopies() > 0) {
+            messageLabel.setText("This book is available now. Borrow it instead of reserving it.");
+            return;
+        }
+        try {
+            reservationService.reserveBook(sel.getId());
+            messageLabel.setText("Book reserved. You will be notified when it is returned.");
+            refreshNotifications();
+        } catch (Exception e) {
+            messageLabel.setText(e.getMessage());
+        }
+    }
+
+    @FXML
+    public void onShowReservations() {
+        try {
+            var reservations = reservationService.listMyReservations();
+            if (reservations.isEmpty()) {
+                messageLabel.setText("You have no reservations.");
+                return;
+            }
+            StringBuilder builder = new StringBuilder();
+            for (ReservationDTO r : reservations) {
+                builder.append(r.getBookTitle())
+                        .append(" (ISBN: ")
+                        .append(r.getIsbn())
+                        .append(") - ")
+                        .append(r.getStatus())
+                        .append(" - reserved at ")
+                        .append(r.getReservedAt())
+                        .append("\n");
+            }
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("My Reservations");
+            alert.setHeaderText("Your reservation status");
+            alert.setContentText(builder.toString());
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            alert.showAndWait();
+        } catch (Exception e) {
+            messageLabel.setText(e.getMessage());
+        }
+    }
+
+    @FXML
+    public void onBack() {
+        SceneManager.switchTo("/ui/Dashboard.fxml");
+    }
 }

@@ -113,4 +113,43 @@ public class BookDAOImpl implements BookDAO {
         }
         return books;
     }
+
+    @Override
+    public List<Book> findAvailable() {
+        List<Book> books = new ArrayList<>();
+        String sql = "SELECT * FROM books WHERE available_copies > 0 ORDER BY title";
+        try (PreparedStatement ps = DBConnection.get().prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) books.add(map(rs));
+        } catch (SQLException e) {
+            throw new DatabaseException("find available books failed", e);
+        }
+        return books;
+    }
+
+    @Override
+    public List<Book> findBorrowed() {
+        List<Book> books = new ArrayList<>();
+        String sql = "SELECT * FROM books WHERE available_copies < total_copies ORDER BY title";
+        try (PreparedStatement ps = DBConnection.get().prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) books.add(map(rs));
+        } catch (SQLException e) {
+            throw new DatabaseException("find borrowed books failed", e);
+        }
+        return books;
+    }
+
+    @Override
+    public List<Book> findNewest() {
+        List<Book> books = new ArrayList<>();
+        String sql = "SELECT * FROM books ORDER BY created_at DESC";
+        try (PreparedStatement ps = DBConnection.get().prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) books.add(map(rs));
+        } catch (SQLException e) {
+            throw new DatabaseException("find newest books failed", e);
+        }
+        return books;
+    }
 }

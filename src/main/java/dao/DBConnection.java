@@ -2,6 +2,7 @@ package dao;
 
 import exception.DatabaseException;
 import util.DBConfig;
+import util.DatabaseInitializer;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,6 +18,7 @@ public class DBConnection {
                         DBConfig.get("db.url"),
                         DBConfig.get("db.user"),
                         DBConfig.get("db.password"));
+                DatabaseInitializer.ensureDefaultUsers(connection);
             }
             return connection;
         } catch (Exception e) {

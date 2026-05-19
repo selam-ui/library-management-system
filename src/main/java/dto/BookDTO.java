@@ -28,4 +28,9 @@ public class BookDTO {
     public void setTotalCopies(int totalCopies) { this.totalCopies = totalCopies; }
     public int getAvailableCopies() { return availableCopies; }
     public void setAvailableCopies(int availableCopies) { this.availableCopies = availableCopies; }
+
+    @Override
+    public String toString() {
+        return title != null ? title + " by " + author : super.toString();
+    }
 }

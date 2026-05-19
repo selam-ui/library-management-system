@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="12" prefWidth="900" prefHeight="600" styleClass="root-pane"
+      xmlns:fx="http://javafx.com/fxml" fx:controller="controller.BorrowController">
+    <padding><Insets top="16" right="16" bottom="16" left="16"/></padding>
+    <Label text="Borrowed Books" styleClass="title"/>
+
+    <HBox spacing="10">
+        <ComboBox fx:id="bookComboBox" promptText="Select book to borrow" HBox.hgrow="ALWAYS"/>
+        <Button text="Borrow" onAction="#onBorrow" styleClass="primary"/>
+        <Button text="Return Selected" onAction="#onReturn"/>
+        <Button text="Back" onAction="#onBack"/>
+    </HBox>
+
+    <TableView fx:id="borrowTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idCol" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="titleCol" text="Title" prefWidth="240"/>
+            <TableColumn fx:id="isbnCol" text="ISBN" prefWidth="130"/>
+            <TableColumn fx:id="borrowDateCol" text="Borrow Date" prefWidth="120"/>
+            <TableColumn fx:id="dueDateCol" text="Due Date" prefWidth="120"/>
+            <TableColumn fx:id="returnDateCol" text="Return Date" prefWidth="120"/>
+            <TableColumn fx:id="statusCol" text="Status" prefWidth="110"/>
+        </columns>
+    </TableView>
+
+    <Label fx:id="messageLabel" styleClass="message"/>
+</VBox>

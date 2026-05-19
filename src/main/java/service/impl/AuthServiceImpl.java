@@ -30,6 +30,10 @@ public class AuthServiceImpl implements AuthService {
                         ? PasswordUtil.verify(password, stored)
                         : stored.equals(password); // fallback for plain seed data
                 if (!ok) throw new AuthenticationException("Invalid credentials");
+                boolean approved = rs.getBoolean("approved");
+                boolean active = rs.getBoolean("active");
+                if (!approved) throw new AuthenticationException("Account pending approval. Please wait for admin approval.");
+                if (!active) throw new AuthenticationException("Account is deactivated. Contact admin.");
 
                 User u = new User(
                         rs.getInt("id"),
@@ -37,7 +41,9 @@ public class AuthServiceImpl implements AuthService {
                         stored,
                         rs.getString("full_name"),
                         rs.getString("email"),
-                        Role.valueOf(rs.getString("role")));
+                        Role.from(rs.getString("role")),
+                        approved,
+                        active);
                 SessionManager.login(u);
                 return u;
             }

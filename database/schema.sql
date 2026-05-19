@@ -7,7 +7,9 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL,
     full_name VARCHAR(100),
     email VARCHAR(100),
-    role ENUM('ADMIN','MEMBER') NOT NULL DEFAULT 'MEMBER',
+    role ENUM('ADMIN','LIBRARIAN','STUDENT') NOT NULL DEFAULT 'STUDENT',
+    approved BOOLEAN NOT NULL DEFAULT FALSE,
+    active BOOLEAN NOT NULL DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -34,10 +36,22 @@ CREATE TABLE IF NOT EXISTS borrow_records (
     FOREIGN KEY (book_id) REFERENCES books(id)
 );
 
+CREATE TABLE IF NOT EXISTS reservations (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    book_id INT NOT NULL,
+    reserved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    notified BOOLEAN NOT NULL DEFAULT FALSE,
+    fulfilled BOOLEAN NOT NULL DEFAULT FALSE,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (book_id) REFERENCES books(id)
+);
+
 -- Default users (passwords are BCrypt hashes for 'admin123' and 'member123')
-INSERT INTO users (username, password, full_name, email, role) VALUES
-('admin',  '$2a$10$7EqJtq98hPqEX7fNZaFWoO9b3vL0vV2pY0pH3wYf7s0Q0qZmF5fS6', 'Administrator', 'admin@lib.local',  'ADMIN'),
-('member', '$2a$10$DowQk0Bd4qK5kqMq8GxJ6e8WJj1Yk8eQ2T6r2Y3KQ7m5n0qHc4yWa', 'Default Member', 'member@lib.local', 'MEMBER')
+INSERT INTO users (username, password, full_name, email, role, approved, active) VALUES
+('admin',     '$2a$10$URwc95FGzYSXuutTg/zvUO9.9kDthWwWUbetVb6yMPaNqzOqu3y9i', 'Administrator',   'admin@lib.local',     'ADMIN', TRUE, TRUE),
+('librarian', '$2a$10$URwc95FGzYSXuutTg/zvUO9.9kDthWwWUbetVb6yMPaNqzOqu3y9i', 'Library Staff',   'librarian@lib.local', 'LIBRARIAN', TRUE, TRUE),
+('student',   '$2a$10$l.HcsDqp..KFSUWCQ.n6ZOqz8alREO4X6tRtKztSWVUwo.WVra.Ka', 'Default Student', 'student@lib.local',   'STUDENT', TRUE, TRUE)
 ON DUPLICATE KEY UPDATE username=username;
 
 INSERT INTO books (isbn, title, author, category, total_copies, available_copies) VALUES

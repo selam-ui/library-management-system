@@ -11,4 +11,7 @@ public interface BookDAO {
     boolean update(Book book);
     boolean delete(int id);
     List<Book> search(String keyword);
+    List<Book> findAvailable();
+    List<Book> findBorrowed();
+    List<Book> findNewest();
 }

@@ -18,4 +18,8 @@
 
 ## Default login
 - Admin: `admin` / `admin123`
-- Member: `member` / `member123`
+- Librarian: `librarian` / `admin123`
+- Student: `student` / `member123`
+
+## New feature
+- Borrow and return books from the dashboard using the new Borrow Books screen.
