@@ -19,7 +19,6 @@ model\BorrowRecord.class
 model\Book.class
 exception\ValidationException.class
 service\impl\UserServiceImpl.class
-controller\BorrowController.class
 mapper\BorrowRecordMapper.class
 service\BookService.class
 service\UserService.class

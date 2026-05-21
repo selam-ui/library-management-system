@@ -12,9 +12,23 @@
         <ComboBox fx:id="bookComboBox" promptText="Select book to borrow" HBox.hgrow="ALWAYS"/>
         <Button text="Borrow" onAction="#onBorrow" styleClass="primary"/>
         <Button text="Return Selected" onAction="#onReturn"/>
+        <Button text="Reserve Selected" onAction="#onReserveSelected"/>
         <Button text="Back" onAction="#onBack"/>
     </HBox>
 
+    <Label text="Available Books" styleClass="subtitle"/>
+    <TableView fx:id="availableTable" prefHeight="180">
+        <columns>
+            <TableColumn fx:id="availIdCol" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="availTitleCol" text="Title" prefWidth="240"/>
+            <TableColumn fx:id="availIsbnCol" text="ISBN" prefWidth="130"/>
+            <TableColumn fx:id="availAuthorCol" text="Author" prefWidth="150"/>
+            <TableColumn fx:id="availCategoryCol" text="Category" prefWidth="120"/>
+            <TableColumn fx:id="availAvailableCol" text="Available" prefWidth="90"/>
+        </columns>
+    </TableView>
+
+    <Label text="Borrow History" styleClass="subtitle"/>
     <TableView fx:id="borrowTable" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="idCol" text="ID" prefWidth="50"/>

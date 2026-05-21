@@ -9,7 +9,9 @@ import dao.interfaces.UserDAO;
 import enumtypes.BorrowStatus;
 import enumtypes.Role;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import model.Book;
@@ -32,6 +34,7 @@ public class DashboardController {
     @FXML private Button borrowButton;
     @FXML private Button usersButton;
     @FXML private VBox statsPane;
+    @FXML private Label accountTypeLabel;
     @FXML private Label totalBooksLabel;
     @FXML private Label borrowedBooksLabel;
     @FXML private Label overdueBooksLabel;
@@ -48,7 +51,17 @@ public class DashboardController {
         User u = SessionManager.getCurrentUser();
         if (u != null) {
             welcomeLabel.setText("Welcome, " + (u.getFullName() != null ? u.getFullName() : u.getUsername()));
-            roleLabel.setText("Role: " + u.getRole());
+            roleLabel.setText("Signed in as: " + u.getUsername());
+            String accountType = switch (u.getRole()) {
+                case STUDENT -> "Student";
+                case LIBRARIAN -> "Librarian";
+                default -> "Administrator";
+            };
+            accountTypeLabel.setText(accountType);
+            accountTypeLabel.getStyleClass().removeAll("student-badge", "librarian-badge", "admin-badge");
+            accountTypeLabel.getStyleClass().add(u.getRole() == Role.STUDENT ? "student-badge"
+                    : u.getRole() == Role.LIBRARIAN ? "librarian-badge" : "admin-badge");
+
             boolean isAdmin = u.getRole() == Role.ADMIN;
             boolean isLibrarian = u.getRole() == Role.LIBRARIAN;
             booksButton.setVisible(isAdmin || isLibrarian);
@@ -56,6 +69,37 @@ public class DashboardController {
             borrowButton.setVisible(true);
             statsPane.setVisible(isAdmin);
             if (isAdmin) loadStats();
+        }
+    }
+
+    private boolean confirm(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, content, ButtonType.OK, ButtonType.CANCEL);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        return alert.showAndWait().filter(ButtonType.OK::equals).isPresent();
+    }
+
+    @FXML
+    public void onOpenBorrow() {
+        if (confirm("Confirm Navigation", "Open Borrow Books page?", "Proceed to Borrow Books?")) {
+            SceneManager.switchTo("/ui/Borrow.fxml");
+        }
+    }
+
+    @FXML
+    public void onOpenUsers() {
+        User u = SessionManager.getCurrentUser();
+        if (u == null || u.getRole() != Role.ADMIN) return;
+        if (confirm("Confirm Navigation", "Open Manage Users page?", "Proceed to Manage Users?")) {
+            SceneManager.switchTo("/ui/Users.fxml");
+        }
+    }
+
+    @FXML
+    public void onLogout() {
+        if (confirm("Confirm Logout", "Logout from the system?", "Are you sure you want to log out?")) {
+            authService.logout();
+            SceneManager.switchTo("/ui/Login.fxml");
         }
     }
 
@@ -90,21 +134,5 @@ public class DashboardController {
             return;
         }
         SceneManager.switchTo("/ui/Books.fxml");
-    }
-
-    @FXML
-    public void onOpenBorrow() { SceneManager.switchTo("/ui/Borrow.fxml"); }
-
-    @FXML
-    public void onOpenUsers() {
-        User u = SessionManager.getCurrentUser();
-        if (u == null || u.getRole() != Role.ADMIN) return;
-        SceneManager.switchTo("/ui/Users.fxml");
-    }
-
-    @FXML
-    public void onLogout() {
-        authService.logout();
-        SceneManager.switchTo("/ui/Login.fxml");
     }
 }

@@ -1,5 +1,10 @@
 .root-pane { -fx-background-color: #f7f8fb; -fx-font-family: "Segoe UI", "Helvetica Neue", Arial; }
 .title { -fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1f2937; }
+.subtitle { -fx-font-size: 14px; -fx-text-fill: #334155; }
+.account-badge { -fx-background-color: #e2e8f0; -fx-text-fill: #0f172a; -fx-padding: 4 10 4 10; -fx-background-radius: 12; -fx-font-weight: bold; }
+.student-badge { -fx-background-color: #d1fae5; -fx-text-fill: #065f46; }
+.librarian-badge { -fx-background-color: #e0f2fe; -fx-text-fill: #0369a1; }
+.admin-badge { -fx-background-color: #fce7f3; -fx-text-fill: #9d174d; }
 .message { -fx-text-fill: #b91c1c; }
 .button { -fx-background-radius: 6; -fx-padding: 8 14; }
 .primary { -fx-background-color: #2563eb; -fx-text-fill: white; }

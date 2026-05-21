@@ -27,6 +27,9 @@
         <Button text="Add" onAction="#onAdd" styleClass="primary"/>
         <Button text="Update" onAction="#onUpdate"/>
         <Button text="Delete" onAction="#onDelete"/>
+        <Button text="Approve" onAction="#onApprove"/>
+        <Button text="Activate" onAction="#onActivate"/>
+        <Button text="Deactivate" onAction="#onDeactivate"/>
         <Button text="Clear" onAction="#onClear"/>
         <Button text="Back" onAction="#onBack"/>
     </HBox>
@@ -34,10 +37,13 @@
     <TableView fx:id="table" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="idCol" text="ID" prefWidth="50"/>
-            <TableColumn fx:id="usernameCol" text="Username" prefWidth="180"/>
-            <TableColumn fx:id="fullNameCol" text="Full Name" prefWidth="180"/>
-            <TableColumn fx:id="emailCol" text="Email" prefWidth="220"/>
-            <TableColumn fx:id="roleCol" text="Role" prefWidth="120"/>
+            <TableColumn fx:id="usernameCol" text="Username" prefWidth="140"/>
+            <TableColumn fx:id="passwordCol" text="Password" prefWidth="300"/>
+            <TableColumn fx:id="fullNameCol" text="Full Name" prefWidth="170"/>
+            <TableColumn fx:id="emailCol" text="Email" prefWidth="180"/>
+            <TableColumn fx:id="roleCol" text="Role" prefWidth="100"/>
+            <TableColumn fx:id="approvedCol" text="Approved" prefWidth="80"/>
+            <TableColumn fx:id="activeCol" text="Active" prefWidth="80"/>
         </columns>
     </TableView>
 

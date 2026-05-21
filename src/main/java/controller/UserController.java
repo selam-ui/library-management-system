@@ -15,6 +15,7 @@ public class UserController {
     @FXML private TableView<User> table;
     @FXML private TableColumn<User, Number> idCol;
     @FXML private TableColumn<User, String> usernameCol;
+    @FXML private TableColumn<User, String> passwordCol;
     @FXML private TableColumn<User, String> fullNameCol;
     @FXML private TableColumn<User, String> emailCol;
     @FXML private TableColumn<User, Role> roleCol;
@@ -35,6 +36,20 @@ public class UserController {
     public void initialize() {
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         usernameCol.setCellValueFactory(new PropertyValueFactory<>("username"));
+        passwordCol.setCellValueFactory(new PropertyValueFactory<>("password"));
+        passwordCol.setCellFactory(column -> new TableCell<User, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setTooltip(null);
+                } else {
+                    setText("********");
+                    setTooltip(new Tooltip(item));
+                }
+            }
+        });
         fullNameCol.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
         roleCol.setCellValueFactory(new PropertyValueFactory<>("role"));
