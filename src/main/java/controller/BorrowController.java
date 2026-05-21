@@ -10,8 +10,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import service.BookService;
 import service.BorrowService;
+import service.ReservationService;
 import service.impl.BookServiceImpl;
 import service.impl.BorrowServiceImpl;
+import service.impl.ReservationServiceImpl;
 import util.SceneManager;
 
 public class BorrowController {
@@ -24,10 +26,18 @@ public class BorrowController {
     @FXML private TableColumn<BorrowRecordDTO, String> returnDateCol;
     @FXML private TableColumn<BorrowRecordDTO, String> statusCol;
     @FXML private ComboBox<BookDTO> bookComboBox;
+    @FXML private TableView<BookDTO> availableTable;
+    @FXML private TableColumn<BookDTO, Number> availIdCol;
+    @FXML private TableColumn<BookDTO, String> availTitleCol;
+    @FXML private TableColumn<BookDTO, String> availIsbnCol;
+    @FXML private TableColumn<BookDTO, String> availAuthorCol;
+    @FXML private TableColumn<BookDTO, String> availCategoryCol;
+    @FXML private TableColumn<BookDTO, Number> availAvailableCol;
     @FXML private Label messageLabel;
 
     private final BorrowService borrowService = new BorrowServiceImpl();
     private final BookService bookService = new BookServiceImpl();
+    private final ReservationService reservationService = new ReservationServiceImpl();
     private final ObservableList<BorrowRecordDTO> records = FXCollections.observableArrayList();
     private final ObservableList<BookDTO> availableBooks = FXCollections.observableArrayList();
 
@@ -42,6 +52,7 @@ public class BorrowController {
         statusCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getStatus().name()));
 
         borrowTable.setItems(records);
+        availableTable.setItems(availableBooks);
         bookComboBox.setItems(availableBooks);
         bookComboBox.setCellFactory(list -> new ListCell<>() {
             @Override
@@ -57,12 +68,19 @@ public class BorrowController {
                 setText(empty || item == null ? null : item.getTitle() + " (" + item.getAvailableCopies() + " available)");
             }
         });
+        availIdCol.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().getId()));
+        availTitleCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getTitle()));
+        availIsbnCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getIsbn()));
+        availAuthorCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getAuthor()));
+        availCategoryCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().getCategory()));
+        availAvailableCol.setCellValueFactory(c -> new SimpleIntegerProperty(c.getValue().getAvailableCopies()));
 
         refresh();
     }
 
     private void refresh() {
         records.setAll(borrowService.listBorrowRecords());
+        borrowTable.refresh();
         availableBooks.setAll(bookService.listAll().stream()
                 .filter(book -> book.getAvailableCopies() > 0)
                 .toList());
@@ -78,6 +96,23 @@ public class BorrowController {
         try {
             borrowService.borrowBook(book.getId());
             messageLabel.setText("Borrow request completed.");
+            bookComboBox.getSelectionModel().clearSelection();
+            refresh();
+        } catch (Exception e) {
+            messageLabel.setText(e.getMessage());
+        }
+    }
+
+    @FXML
+    public void onReserveSelected() {
+        BookDTO book = availableTable.getSelectionModel().getSelectedItem();
+        if (book == null) {
+            messageLabel.setText("Select a book to reserve.");
+            return;
+        }
+        try {
+            reservationService.reserveBook(book.getId());
+            messageLabel.setText("Book reservation created.");
             refresh();
         } catch (Exception e) {
             messageLabel.setText(e.getMessage());
@@ -94,6 +129,7 @@ public class BorrowController {
         try {
             borrowService.returnBook(record.getId());
             messageLabel.setText("Book returned successfully.");
+            borrowTable.getSelectionModel().clearSelection();
             refresh();
         } catch (Exception e) {
             messageLabel.setText(e.getMessage());

@@ -42,9 +42,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User register(User user) throws ValidationException {
         UserValidator.validate(user, true);
-        user.setRole(Role.STUDENT);
-        user.setApproved(false);
-        user.setActive(false);
+        if (user.getRole() == null) {
+            user.setRole(Role.STUDENT);
+        }
+        if (user.getRole() == Role.STUDENT) {
+            user.setApproved(true);
+            user.setActive(true);
+        } else {
+            user.setApproved(false);
+            user.setActive(false);
+        }
         user.setPassword(PasswordUtil.hash(user.getPassword()));
         return dao.save(user);
     }

@@ -8,6 +8,7 @@
     <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
     <Label fx:id="welcomeLabel" styleClass="title"/>
     <Label fx:id="roleLabel"/>
+    <Label fx:id="accountTypeLabel" styleClass="subtitle"/>
     <HBox spacing="10">
         <Button fx:id="booksButton" text="Manage Books" onAction="#onOpenBooks" styleClass="primary"/>
         <Button fx:id="borrowButton" text="Borrow Books" onAction="#onOpenBorrow"/>

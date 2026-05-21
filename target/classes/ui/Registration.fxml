@@ -13,6 +13,7 @@
     <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password"/>
     <TextField fx:id="fullNameField" promptText="Full Name"/>
     <TextField fx:id="emailField" promptText="Email"/>
+    <ComboBox fx:id="roleComboBox" promptText="Register as Student or Librarian"/>
     <HBox spacing="10">
         <Button text="Submit" onAction="#onRegister" styleClass="primary"/>
         <Button text="Back" onAction="#onBack"/>

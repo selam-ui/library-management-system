@@ -9,7 +9,9 @@ import dao.interfaces.UserDAO;
 import enumtypes.BorrowStatus;
 import enumtypes.Role;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import model.Book;
@@ -32,6 +34,7 @@ public class DashboardController {
     @FXML private Button borrowButton;
     @FXML private Button usersButton;
     @FXML private VBox statsPane;
+    @FXML private Label accountTypeLabel;
     @FXML private Label totalBooksLabel;
     @FXML private Label borrowedBooksLabel;
     @FXML private Label overdueBooksLabel;
@@ -49,6 +52,7 @@ public class DashboardController {
         if (u != null) {
             welcomeLabel.setText("Welcome, " + (u.getFullName() != null ? u.getFullName() : u.getUsername()));
             roleLabel.setText("Role: " + u.getRole());
+            accountTypeLabel.setText("Account type: " + (u.getRole() == Role.STUDENT ? "Student" : u.getRole() == Role.LIBRARIAN ? "Librarian" : "Administrator"));
             boolean isAdmin = u.getRole() == Role.ADMIN;
             boolean isLibrarian = u.getRole() == Role.LIBRARIAN;
             booksButton.setVisible(isAdmin || isLibrarian);
@@ -93,13 +97,27 @@ public class DashboardController {
     }
 
     @FXML
-    public void onOpenBorrow() { SceneManager.switchTo("/ui/Borrow.fxml"); }
+    public void onOpenBorrow() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                "Proceed to Borrow Books?", ButtonType.OK, ButtonType.CANCEL);
+        alert.setTitle("Confirm Navigation");
+        alert.setHeaderText("Open Borrow Books page?");
+        if (alert.showAndWait().filter(ButtonType.OK::equals).isPresent()) {
+            SceneManager.switchTo("/ui/Borrow.fxml");
+        }
+    }
 
     @FXML
     public void onOpenUsers() {
         User u = SessionManager.getCurrentUser();
         if (u == null || u.getRole() != Role.ADMIN) return;
-        SceneManager.switchTo("/ui/Users.fxml");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                "Proceed to Manage Users?", ButtonType.OK, ButtonType.CANCEL);
+        alert.setTitle("Confirm Navigation");
+        alert.setHeaderText("Open Manage Users page?");
+        if (alert.showAndWait().filter(ButtonType.OK::equals).isPresent()) {
+            SceneManager.switchTo("/ui/Users.fxml");
+        }
     }
 
     @FXML
