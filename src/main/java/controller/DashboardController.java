@@ -51,6 +51,7 @@ public class DashboardController {
         User u = SessionManager.getCurrentUser();
         if (u != null) {
             welcomeLabel.setText("Welcome, " + (u.getFullName() != null ? u.getFullName() : u.getUsername()));
+<<<<<<< HEAD
             roleLabel.setText("Signed in as: " + u.getUsername());
             String accountType = switch (u.getRole()) {
                 case STUDENT -> "Student";
@@ -62,6 +63,10 @@ public class DashboardController {
             accountTypeLabel.getStyleClass().add(u.getRole() == Role.STUDENT ? "student-badge"
                     : u.getRole() == Role.LIBRARIAN ? "librarian-badge" : "admin-badge");
 
+=======
+            roleLabel.setText("Role: " + u.getRole());
+            accountTypeLabel.setText("Account type: " + (u.getRole() == Role.STUDENT ? "Student" : u.getRole() == Role.LIBRARIAN ? "Librarian" : "Administrator"));
+>>>>>>> 372de1882b118596593011b05e9bf254c82a1182
             boolean isAdmin = u.getRole() == Role.ADMIN;
             boolean isLibrarian = u.getRole() == Role.LIBRARIAN;
             booksButton.setVisible(isAdmin || isLibrarian);
@@ -135,4 +140,37 @@ public class DashboardController {
         }
         SceneManager.switchTo("/ui/Books.fxml");
     }
+<<<<<<< HEAD
+=======
+
+    @FXML
+    public void onOpenBorrow() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                "Proceed to Borrow Books?", ButtonType.OK, ButtonType.CANCEL);
+        alert.setTitle("Confirm Navigation");
+        alert.setHeaderText("Open Borrow Books page?");
+        if (alert.showAndWait().filter(ButtonType.OK::equals).isPresent()) {
+            SceneManager.switchTo("/ui/Borrow.fxml");
+        }
+    }
+
+    @FXML
+    public void onOpenUsers() {
+        User u = SessionManager.getCurrentUser();
+        if (u == null || u.getRole() != Role.ADMIN) return;
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                "Proceed to Manage Users?", ButtonType.OK, ButtonType.CANCEL);
+        alert.setTitle("Confirm Navigation");
+        alert.setHeaderText("Open Manage Users page?");
+        if (alert.showAndWait().filter(ButtonType.OK::equals).isPresent()) {
+            SceneManager.switchTo("/ui/Users.fxml");
+        }
+    }
+
+    @FXML
+    public void onLogout() {
+        authService.logout();
+        SceneManager.switchTo("/ui/Login.fxml");
+    }
+>>>>>>> 372de1882b118596593011b05e9bf254c82a1182
 }

@@ -7,11 +7,16 @@
       xmlns:fx="http://javafx.com/fxml" fx:controller="controller.DashboardController">
     <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
     <Label fx:id="welcomeLabel" styleClass="title"/>
+<<<<<<< HEAD
     <HBox spacing="12" alignment="CENTER_LEFT">
         <Label fx:id="roleLabel" styleClass="subtitle"/>
         <Label text="[Account type]" styleClass="subtitle" visible="false"/>
         <Label fx:id="accountTypeLabel" styleClass="account-badge"/>
     </HBox>
+=======
+    <Label fx:id="roleLabel"/>
+    <Label fx:id="accountTypeLabel" styleClass="subtitle"/>
+>>>>>>> 372de1882b118596593011b05e9bf254c82a1182
     <HBox spacing="10">
         <Button fx:id="booksButton" text="Manage Books" onAction="#onOpenBooks" styleClass="primary"/>
         <Button fx:id="borrowButton" text="Borrow Books" onAction="#onOpenBorrow"/>
